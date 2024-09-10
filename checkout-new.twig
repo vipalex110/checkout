@@ -189,6 +189,131 @@ display:none;
 	
 
 
+
+	
+<!-- LOGIN AND EXTRA GIELDS START -->
+	
+	
+	
+	
+	
+	
+	<div id="checkoutLogin">
+    <div class="supercheckout-checkout-content"></div>
+    
+    {% if (not logged) %} 
+        
+        <!-- Оставляем только опцию 'guest' -->
+        <div class="form-group login-options">
+            <div class="radio-inline">
+                <input type="radio" name="account" value="guest" id="guest" checked="checked" />
+                <label>{{ text_guest_new }}</label>
+            </div>
+        </div>
+
+        <!-- Поле для ввода email для гостевой регистрации -->
+        <div class="supercheckout-extra-wrap">
+            <label class="control-label" for="email">{{ entry_email }}</label>
+            <input type="text" id="email" name="email" value="" class="supercheckout-large-field form-control" placeholder="{{ entry_email }}" style="width:100% !important"/>
+        </div>
+
+        <!-- Дополнительные поля, если они требуются для гостевой регистрации -->
+        <div id="supercheckout-guest-fields" style="padding-bottom: 10px;">
+            <input id="use_password" type="hidden" name="use_password" value="0" >
+            
+            <!-- Пользовательские поля, если они есть -->
+            {% for custom_field in custom_fields %}
+                {% if (custom_field['location'] == 'account') %}
+                    {% if (custom_field['type'] == 'text') %}
+                        <div class="supercheckout-extra-wrap custom-field" id="custom-field{{ custom_field['custom_field_id'] }}">
+                            <span class="supercheckout-login-label"><b>{{ custom_field['name'] }}<span style="display:{% if (custom_field['required'] == 1) %} inline{% else %} none{% endif %};" class="supercheckout-required">*</span></b></span><br/>
+                            <span class="supercheckout-login-value">
+                                <input type="text" name="custom_field[{{ custom_field['location'] }}][{{ custom_field['custom_field_id'] }}]" value="{{ custom_field['value'] }}" placeholder="" id="input-payment-custom-field{{ custom_field['custom_field_id'] }}" class="supercheckout-large-field account_custom_field" data="{% if (custom_field['required'] == 1) %} required{% else %} ''{% endif %}" />
+                            </span>
+                            <p style="color:red;" class="required_field{{ custom_field['custom_field_id'] }}"></p>
+                        </div>
+                    {% endif %}
+                    
+                    {% if (custom_field['type'] == 'select') %}
+                        <div class="supercheckout-extra-wrap custom-field" id="custom-field{{ custom_field['custom_field_id'] }}">
+                            <b>{{ custom_field['name'] }}</b>
+                            <span style="display:{% if (custom_field['required'] == 1) %} inline{% else %} none{% endif %};" class="supercheckout-required">*</span>
+                            <select name="custom_field[{{ custom_field['location'] }}][{{ custom_field['custom_field_id'] }}]" id="input-payment-custom-field{{ custom_field['custom_field_id'] }}" class="supercheckout-large-field account_custom_field">
+                                <option value="">{{ text_select }}</option>
+                                {% for custom_field_value in custom_field['custom_field_value'] %}
+                                    <option value="{{ custom_field_value['custom_field_value_id'] }}">{{ custom_field_value['name'] }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    {% endif %}
+                {% endif %}
+            {% endfor %}
+        </div>
+
+        <div class="supercheckout-clear"></div>
+
+    {% else %} 
+        <div class="myaccount">
+            <ol class="rectangle-list">                            
+                <li>
+                    <a href="{{ myAccount }}">{{ text_my_account }}</a>
+                </li>
+                <li>
+                    <a href="{{ logoutLink }}">{{ text_logout }}</a>
+                </li>
+                <div class="supercheckout-clear"></div>
+            </ol>
+        </div>
+    {% endif %} 
+</div>
+
+	
+	
+	
+	
+	
+
+	
+<!-- LOGIN AND EXTRA GIELDS END -->
+
+
+
+
+
+	
+	
+
+	{% if (not logged) %} 
+            {% if (customer_groups is defined) %} 
+                    <div class="customer_group" id="customer_group_div">
+                    <label style="display:{% if customer_groups|length > 1 %}{{ 'block !important' }} {% else %} {{ 'none !important' }}{% endif %}"><b>{{ text_customer_groups }}</b></label>
+                     {% for all_groups in customer_groups %} 
+                        <div class="supercheckout-extra-wrap" style="display:{% if customer_groups|length > 1 %}{{ 'block !important' }} {% else %} {{ 'none !important' }}{% endif %}">
+                            <label for="customer_group">
+                                <input type="radio" name="customer_group_id" value="{{ all_groups['customer_group_id'] }}" id="customer-groups{{ all_groups['customer_group_id'] }}" class="actual_radio_button"/>
+                                <b>{{ all_groups['name'] }}</b>
+                            </label>
+                            <br />
+                        </div><br>
+                     {% endfor %} 
+                    
+		</div>
+            {% endif %} 
+	{% endif %} 
+</div>
+
+                        <div  class="supercheckout-blocks"  data-column="{{ sort_block['payment_address'][layout_name]['column'] }}" data-row="{{ sort_block['payment_address'][layout_name]['row'] }}" data-column-inside="{{ sort_block['payment_address'][layout_name]['column-inside'] }}">
+                                <h2 class="supercheckout-numbers supercheckout-numbers-2">{{ text_billing_address }}<i class="fa fa-envelope"></i></h2>
+
+
+
+
+<!-- FIRST NAME PAYMENT START -->
+
+
+
+
+
   <div id="checkoutBillingAddress">
                                         {% if (addresses) %} 
                                                 <div class="supercheckout-checkout-content">
@@ -830,131 +955,6 @@ display:none;
                                                 </li>
                                         </ul>
                                 </div>
-
-
-	
-<!-- LOGIN AND EXTRA GIELDS START -->
-	
-	
-	
-	
-	
-	
-	<div id="checkoutLogin">
-    <div class="supercheckout-checkout-content"></div>
-    
-    {% if (not logged) %} 
-        
-        <!-- Оставляем только опцию 'guest' -->
-        <div class="form-group login-options">
-            <div class="radio-inline">
-                <input type="radio" name="account" value="guest" id="guest" checked="checked" />
-                <label>{{ text_guest_new }}</label>
-            </div>
-        </div>
-
-        <!-- Поле для ввода email для гостевой регистрации -->
-        <div class="supercheckout-extra-wrap">
-            <label class="control-label" for="email">{{ entry_email }}</label>
-            <input type="text" id="email" name="email" value="" class="supercheckout-large-field form-control" placeholder="{{ entry_email }}" style="width:100% !important"/>
-        </div>
-
-        <!-- Дополнительные поля, если они требуются для гостевой регистрации -->
-        <div id="supercheckout-guest-fields" style="padding-bottom: 10px;">
-            <input id="use_password" type="hidden" name="use_password" value="0" >
-            
-            <!-- Пользовательские поля, если они есть -->
-            {% for custom_field in custom_fields %}
-                {% if (custom_field['location'] == 'account') %}
-                    {% if (custom_field['type'] == 'text') %}
-                        <div class="supercheckout-extra-wrap custom-field" id="custom-field{{ custom_field['custom_field_id'] }}">
-                            <span class="supercheckout-login-label"><b>{{ custom_field['name'] }}<span style="display:{% if (custom_field['required'] == 1) %} inline{% else %} none{% endif %};" class="supercheckout-required">*</span></b></span><br/>
-                            <span class="supercheckout-login-value">
-                                <input type="text" name="custom_field[{{ custom_field['location'] }}][{{ custom_field['custom_field_id'] }}]" value="{{ custom_field['value'] }}" placeholder="" id="input-payment-custom-field{{ custom_field['custom_field_id'] }}" class="supercheckout-large-field account_custom_field" data="{% if (custom_field['required'] == 1) %} required{% else %} ''{% endif %}" />
-                            </span>
-                            <p style="color:red;" class="required_field{{ custom_field['custom_field_id'] }}"></p>
-                        </div>
-                    {% endif %}
-                    
-                    {% if (custom_field['type'] == 'select') %}
-                        <div class="supercheckout-extra-wrap custom-field" id="custom-field{{ custom_field['custom_field_id'] }}">
-                            <b>{{ custom_field['name'] }}</b>
-                            <span style="display:{% if (custom_field['required'] == 1) %} inline{% else %} none{% endif %};" class="supercheckout-required">*</span>
-                            <select name="custom_field[{{ custom_field['location'] }}][{{ custom_field['custom_field_id'] }}]" id="input-payment-custom-field{{ custom_field['custom_field_id'] }}" class="supercheckout-large-field account_custom_field">
-                                <option value="">{{ text_select }}</option>
-                                {% for custom_field_value in custom_field['custom_field_value'] %}
-                                    <option value="{{ custom_field_value['custom_field_value_id'] }}">{{ custom_field_value['name'] }}</option>
-                                {% endfor %}
-                            </select>
-                        </div>
-                    {% endif %}
-                {% endif %}
-            {% endfor %}
-        </div>
-
-        <div class="supercheckout-clear"></div>
-
-    {% else %} 
-        <div class="myaccount">
-            <ol class="rectangle-list">                            
-                <li>
-                    <a href="{{ myAccount }}">{{ text_my_account }}</a>
-                </li>
-                <li>
-                    <a href="{{ logoutLink }}">{{ text_logout }}</a>
-                </li>
-                <div class="supercheckout-clear"></div>
-            </ol>
-        </div>
-    {% endif %} 
-</div>
-
-	
-	
-	
-	
-	
-
-	
-<!-- LOGIN AND EXTRA GIELDS END -->
-
-
-
-
-
-	
-	
-
-	{% if (not logged) %} 
-            {% if (customer_groups is defined) %} 
-                    <div class="customer_group" id="customer_group_div">
-                    <label style="display:{% if customer_groups|length > 1 %}{{ 'block !important' }} {% else %} {{ 'none !important' }}{% endif %}"><b>{{ text_customer_groups }}</b></label>
-                     {% for all_groups in customer_groups %} 
-                        <div class="supercheckout-extra-wrap" style="display:{% if customer_groups|length > 1 %}{{ 'block !important' }} {% else %} {{ 'none !important' }}{% endif %}">
-                            <label for="customer_group">
-                                <input type="radio" name="customer_group_id" value="{{ all_groups['customer_group_id'] }}" id="customer-groups{{ all_groups['customer_group_id'] }}" class="actual_radio_button"/>
-                                <b>{{ all_groups['name'] }}</b>
-                            </label>
-                            <br />
-                        </div><br>
-                     {% endfor %} 
-                    
-		</div>
-            {% endif %} 
-	{% endif %} 
-</div>
-
-                        <div  class="supercheckout-blocks"  data-column="{{ sort_block['payment_address'][layout_name]['column'] }}" data-row="{{ sort_block['payment_address'][layout_name]['row'] }}" data-column-inside="{{ sort_block['payment_address'][layout_name]['column-inside'] }}">
-                                <h2 class="supercheckout-numbers supercheckout-numbers-2">{{ text_billing_address }}<i class="fa fa-envelope"></i></h2>
-
-
-
-
-<!-- FIRST NAME PAYMENT START -->
-
-
-
-
 
  
 
